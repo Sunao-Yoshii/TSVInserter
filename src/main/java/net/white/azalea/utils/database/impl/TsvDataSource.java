@@ -42,9 +42,50 @@ public class TsvDataSource implements DataSource {
 
     @Override
     public List<Map<String, String>> loadDataSource() throws IOException {
-        List<Map<String, String>> lists = new LinkedList<>();
-        List<String[]> rows;
 
+        // loading.
+        List<String[]> rows = this.loadRows();
+
+        // load headers.
+        String[] headers = rows.get(0);
+
+        // convert to maps.
+        List<Map<String, String>> lists = new LinkedList<>();
+        for (String[] strs : rows) {
+            if (strs == headers) continue;
+
+            Map<String, String> row = this.zipToMap(headers, strs);
+            lists.add(row);
+        }
+
+        return lists;
+    }
+
+    /**
+     * Zips the list of headers passed in the first argument
+     * and the list of values ​​passed in the second argument
+     * with the same index as the key.
+     *
+     * @param headers Map key values.
+     * @param strs    Map values.
+     * @return zipped map.
+     * @throws IOException throw if header is null or empty.
+     */
+    private Map<String, String> zipToMap(String[] headers, String[] strs) throws IOException {
+        HashMap<String, String> row = new HashMap<>(strs.length);
+        for (int n = 0; n < strs.length; n++) {
+            row.put(this.toLower(headers[n]), this.wrapAsNull(strs[n]));
+        }
+        return row;
+    }
+
+    /**
+     * Load TSV file as TSV columns list.
+     * @return Read value (as list of String[]).
+     * @throws IOException When failed to access.
+     */
+    private List<String[]> loadRows() throws IOException {
+        List<String[]> rows;
         try(BufferedReader reader = Files.newBufferedReader(this.path, Charset.forName("UTF-8"))) {
             Stream<String> lines = reader.lines();
 
@@ -53,22 +94,7 @@ public class TsvDataSource implements DataSource {
                     .filter(v -> v.length > 0)
                     .collect(Collectors.toList());
         }
-
-        // load headers.
-        String[] headers = rows.get(0);
-
-        // convert to maps.
-        for (String[] strs : rows) {
-            if (strs == headers) continue;
-
-            HashMap<String, String> row = new HashMap<>(strs.length);
-            for (int n = 0; n < strs.length; n++) {
-                row.put(this.toLower(headers[n]), this.wrapAsNull(strs[n]));
-            }
-            lists.add(row);
-        }
-
-        return lists;
+        return rows;
     }
 
     /**
