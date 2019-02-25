@@ -1,4 +1,4 @@
-package net.white.azalea.utils.database;
+package net.white.azalea.utils.database.schema;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,24 +24,6 @@ public class TableDefinition {
      * Table name.
      */
     public final String tableName;
-
-    /**
-     * Getter for table name.
-     *
-     * @return table name.
-     */
-    public String getTableName() {
-        return this.tableName;
-    }
-
-    /**
-     * Getter for database schema name.
-     *
-     * @return schema name.
-     */
-    public String getSchemaName() {
-        return this.schemaName;
-    }
 
     public TableDefinition(final String schemaName, final String tableName) {
         this(schemaName, tableName, new ArrayList<>());

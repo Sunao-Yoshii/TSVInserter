@@ -1,5 +1,8 @@
 package net.white.azalea.utils.database;
 
+import net.white.azalea.utils.database.schema.ColumnDefinition;
+import net.white.azalea.utils.database.schema.TableDefinition;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +12,7 @@ import java.util.List;
  *
  * @author S.Yoshii
  */
-public class TableSchemaCache {
+class TableSchemaCache {
 
     /**
      * Singleton instance.
@@ -21,7 +24,7 @@ public class TableSchemaCache {
      *
      * @return TableSchemaCache class instance.
      */
-    public static TableSchemaCache getInstance() {
+    static TableSchemaCache getInstance() {
         return $_INSTANCE;
     }
 
@@ -30,7 +33,7 @@ public class TableSchemaCache {
      */
     private final List<TableDefinition> tableDefinitions;
 
-    public TableSchemaCache() {
+    TableSchemaCache() {
         this.tableDefinitions = new ArrayList<>();
     }
 
@@ -43,7 +46,7 @@ public class TableSchemaCache {
      * @return TableDefinition instance if it find.
      * @throws SQLException throw if cannot read schemas.
      */
-    public TableDefinition getTableDefinition(Connection connection, String schemaName, String tableName) throws SQLException {
+    TableDefinition getTableDefinition(Connection connection, String schemaName, String tableName) throws SQLException {
 
         // Search from cache.
         for (TableDefinition def : this.tableDefinitions) {
@@ -59,7 +62,8 @@ public class TableSchemaCache {
             while (rs.next()) {
                 table.columnDefinitions.add(new ColumnDefinition(
                         rs.getString("COLUMN_NAME"),
-                        rs.getInt("TYPE_NAME"),
+                        rs.getString("TYPE_NAME"),
+                        rs.getInt("DATA_TYPE"),
                         rs.getInt("COLUMN_SIZE")
                 ));
             }
