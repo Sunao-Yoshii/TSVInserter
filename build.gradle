@@ -13,6 +13,7 @@ repositories {
 }
 
 dependencies {
+    compile 'commons-codec:commons-codec:1.+'
     compileOnly 'org.projectlombok:lombok:1.18.4'
     apt 'org.projectlombok:lombok:1.18.4'
 
