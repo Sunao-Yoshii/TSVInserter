@@ -43,7 +43,7 @@ public class H2ColumnConverter implements ColumnConverter {
     }
 
     @Override
-    public Object conversion(int dataType, String value) throws IOException {
+    public Object conversion(int dataType, String columnType,  String value) throws IOException {
         try {
             switch (dataType) {
                 case INTEGER:

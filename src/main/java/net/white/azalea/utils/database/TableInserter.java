@@ -96,7 +96,7 @@ public class TableInserter {
                     Optional<ColumnDefinition> cdef = this.findColumn(columns, entry.getKey());
                     if (cdef.isPresent()) {
                         int dataType = cdef.get().dataType;
-                        Object conv = binder.conversion(dataType, entry.getValue());
+                        Object conv = binder.conversion(dataType, cdef.get().columnType, entry.getValue());
                         ps.setObject(idx++, conv, dataType);
 
                         converted.put(entry.getKey(), conv);

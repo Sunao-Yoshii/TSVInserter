@@ -25,19 +25,35 @@ public class TsvDataSource implements DataSource {
     private final Path path;
 
     /**
+     * File encoding.
+     */
+    private final String fileEncoding;
+
+    /**
      * Specified load target.
-     * @param dataSource load target TSV path string.
+     * @param dataSource data source path.
      */
     public TsvDataSource(String dataSource) {
-        this(Paths.get(dataSource));
+        this(Paths.get(dataSource), "UTF-8");
     }
 
     /**
      * Specified load target.
-     * @param path load target path.
+     * @param dataSource load target TSV path string.
+     * @param encoding   source file encoding.
      */
-    public TsvDataSource(Path path) {
+    public TsvDataSource(String dataSource, String encoding) {
+        this(Paths.get(dataSource), encoding);
+    }
+
+    /**
+     * Specified load target.
+     * @param path      load target path.
+     * @param encoding  source file encoding.
+     */
+    public TsvDataSource(Path path, String encoding) {
         this.path = path;
+        this.fileEncoding = encoding;
     }
 
     @Override
@@ -86,7 +102,7 @@ public class TsvDataSource implements DataSource {
      */
     private List<String[]> loadRows() throws IOException {
         List<String[]> rows;
-        try(BufferedReader reader = Files.newBufferedReader(this.path, Charset.forName("UTF-8"))) {
+        try(BufferedReader reader = Files.newBufferedReader(this.path, Charset.forName(this.fileEncoding))) {
             Stream<String> lines = reader.lines();
 
             rows = lines.filter(v -> v != null && v.length() > 0)

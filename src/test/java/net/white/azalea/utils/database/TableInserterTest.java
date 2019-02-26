@@ -54,13 +54,15 @@ class TableInserterTest {
 
     @Test
     void insert() throws Exception {
+        // Exec
         TableInserter inserter = new TableInserter(this.connection, "");
         inserter.insert(
                 "TEST_SCHEMA",
-                new TsvDataSource(Paths.get(ClassLoader.getSystemResource("TableInserterTest.tsv").toURI())),
+                new TsvDataSource(Paths.get(ClassLoader.getSystemResource("TableInserterTest.tsv").toURI()), "UTF-8"),
                 new H2ColumnConverter()
                 );
 
+        // checking
         try (PreparedStatement st = this.connection.prepareStatement("SELECT * FROM TEST_SCHEMA")) {
             try (ResultSet rs = st.executeQuery()) {
                 List<Object[]> result = new ArrayList<>();
@@ -81,17 +83,7 @@ class TableInserterTest {
 
                     result.add(data);
                 }
-                /*
-                "Column1 VARCHAR(32), " +
-                "Column2 INTEGER, " +
-                "Column3 CHAR(32), " +
-                "Column4 BOOLEAN, " +
-                "Column5 DECIMAL(10,2), " +
-                "Column6 DOUBLE, " +
-                "Column7 REAL, " +
-                "Column8 TIME," +
-                "Column9 DATE," +
-                "Column10 TIMESTAMP, " +*/
+
                 DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
                 DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
                 DateFormat datetimeFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");

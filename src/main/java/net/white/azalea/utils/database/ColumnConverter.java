@@ -10,12 +10,13 @@ public interface ColumnConverter {
     /**
      * column convert method.
      *
-     * @param dataType JDBC DataType.
-     * @param value    From src.
+     * @param dataType   JDBC DataType.
+     * @param columnType String value of column type.
+     * @param value      From src.
      * @return converted value.
      * @throws IOException parse or read error.
      */
-    Object conversion(int dataType, String value) throws IOException;
+    Object conversion(int dataType, String columnType, String value) throws IOException;
 
     /**
      * Column name wrapper.
