@@ -28,7 +28,7 @@ class TableSchemaCacheTest {
         this.connection = DriverManager.getConnection ("jdbc:h2:mem:test", "sa","");
         Statement statement = this.connection.createStatement();
 
-        statement.execute("CREATE TABLE TEST_SCHEMA (" +
+        statement.execute("CREATE TABLE TEST_SCHEMA_CACHE (" +
                 "id BIGINT AUTO_INCREMENT, " +
                 "Column1 VARCHAR(32), " +
                 "Column2 INTEGER, " +
@@ -46,10 +46,10 @@ class TableSchemaCacheTest {
     void getTableDefinition() throws Exception {
         TableDefinition definition =
             TableSchemaCache.getInstance()
-                    .getTableDefinition(this.connection, "", "TEST_SCHEMA");
+                    .getTableDefinition(this.connection, "", "TEST_SCHEMA_CACHE");
 
         assertAll(
-                () -> assertEquals("TEST_SCHEMA", definition.tableName),
+                () -> assertEquals("TEST_SCHEMA_CACHE", definition.tableName),
                 () -> assertEquals(4, definition.columnDefinitions.size())
         );
 

@@ -31,7 +31,7 @@ class TableInserterTest {
         this.connection = DriverManager.getConnection ("jdbc:h2:mem:test", "sa","");
         Statement statement = this.connection.createStatement();
 
-        statement.execute("CREATE TABLE TEST_SCHEMA (" +
+        statement.execute("CREATE TABLE TEST_INSERT (" +
                 "id BIGINT AUTO_INCREMENT, " +
                 "Column1 VARCHAR(32), " +
                 "Column2 INTEGER, " +
@@ -45,6 +45,7 @@ class TableInserterTest {
                 "Column10 TIMESTAMP, " +
                 "PRIMARY KEY(id)" +
                 ")");
+        statement.close();
     }
 
     @AfterEach
@@ -57,13 +58,13 @@ class TableInserterTest {
         // Exec
         TableInserter inserter = new TableInserter(this.connection, "");
         inserter.insert(
-                "TEST_SCHEMA",
+                "TEST_INSERT",
                 new TsvDataSource(Paths.get(ClassLoader.getSystemResource("TableInserterTest.tsv").toURI()), "UTF-8"),
                 new H2ColumnConverter()
                 );
 
         // checking
-        try (PreparedStatement st = this.connection.prepareStatement("SELECT * FROM TEST_SCHEMA")) {
+        try (PreparedStatement st = this.connection.prepareStatement("SELECT * FROM TEST_INSERT")) {
             try (ResultSet rs = st.executeQuery()) {
                 List<Object[]> result = new ArrayList<>();
                 while (rs.next()) {
